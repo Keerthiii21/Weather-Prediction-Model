@@ -1,0 +1,50 @@
+{
+  "dataset": "Open-Meteo Archive API \u2014 Bengaluru",
+  "rows_raw": 3209,
+  "rows_supervised": 3194,
+  "train_rows": 2555,
+  "test_rows": 639,
+  "split": "chronological 80/20; latest 20% held out",
+  "precipitation_threshold_mm": 1.0,
+  "temperature_max_next_day": {
+    "random_forest_mae_c": 0.832,
+    "random_forest_rmse_c": 1.093,
+    "persistence_mae_c": 1.143,
+    "persistence_rmse_c": 1.493
+  },
+  "precipitation_occurrence_next_day": {
+    "random_forest_accuracy": 0.845,
+    "random_forest_precision": 0.813,
+    "random_forest_recall": 0.839,
+    "random_forest_f1": 0.826,
+    "test_positive_count": 280,
+    "test_rows": 639,
+    "classification_report": {
+      "0": {
+        "precision": 0.8714285714285714,
+        "recall": 0.8495821727019499,
+        "f1-score": 0.8603667136812412,
+        "support": 359.0
+      },
+      "1": {
+        "precision": 0.8131487889273357,
+        "recall": 0.8392857142857143,
+        "f1-score": 0.8260105448154658,
+        "support": 280.0
+      },
+      "accuracy": 0.8450704225352113,
+      "macro avg": {
+        "precision": 0.8422886801779536,
+        "recall": 0.8444339434938322,
+        "f1-score": 0.8431886292483535,
+        "support": 639.0
+      },
+      "weighted avg": {
+        "precision": 0.8458912645422709,
+        "recall": 0.8450704225352113,
+        "f1-score": 0.8453123673863787,
+        "support": 639.0
+      }
+    }
+  }
+}
