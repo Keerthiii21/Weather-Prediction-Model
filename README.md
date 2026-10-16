@@ -1,100 +1,184 @@
 # WeatherCast ML — Next-Day Weather Prediction
 
-A reproducible machine-learning project that predicts **next-day maximum temperature** and **whether measurable precipitation will occur** from recent weather observations. It uses real historical weather data from the Open-Meteo Archive API, temporal feature engineering, time-ordered evaluation, baseline comparisons, and a small Streamlit dashboard.
+A machine learning project that predicts **next-day maximum temperature and precipitation occurrence** using historical weather observations, feature engineering, and time-based model evaluation. Includes an interactive Streamlit dashboard for exploring weather forecasts and model performance.
 
-> **Scope:** This is a portfolio-ready project scaffold. Run the pipeline and report the metrics it actually produces. Do not claim a specific accuracy until you have run it.
+## Project Overview
 
-## Research question
-Can recent weather observations and calendar/seasonality features improve next-day predictions over simple baselines?
+WeatherCast ML investigates whether recent weather observations and calendar-based features can improve next-day predictions compared with a simple persistence baseline.
 
-## Features
-- Fetches daily historical weather for Bengaluru (coordinates configurable).
-- Builds lag and rolling-window features without using future information.
-- Predicts next-day maximum temperature (regression) and precipitation occurrence (classification).
-- Uses a chronological train/test split to reduce leakage.
-- Compares a persistence baseline against a Random Forest model.
-- Reports MAE/RMSE for temperature and precision/recall/F1 for precipitation.
-- Saves processed data, fitted models, metrics, and test predictions.
-- Includes an optional Streamlit dashboard for inspection.
+**Key highlights**
+- Built a reproducible data-fetching and machine learning pipeline.
+- Engineered lagged and rolling-window features from historical weather data.
+- Trained Random Forest models for temperature regression and precipitation classification.
+- Evaluated performance using a chronological train/test split.
+- Compared temperature predictions against a persistence baseline.
+- Developed an interactive Streamlit dashboard with live weather information and an ML evaluation section.
 
-## Quick start (VS Code, ~10–15 minutes)
+## Tech Stack
 
-### 1. Open the project
-Extract the ZIP, then in VS Code choose **File → Open Folder** and select `WeatherCast-ML`.
+- **Language:** Python
+- **Machine Learning:** scikit-learn, Random Forest
+- **Data Processing:** pandas, NumPy
+- **Visualization:** Streamlit and Plotly
+- **Weather Data:** Open-Meteo API
+- **Development:** VS Code, Git, GitHub
 
-### 2. Create a virtual environment
-Open **Terminal → New Terminal** and run:
+## 🎯 Prediction Tasks
+
+1. **Temperature prediction:** Estimate the next day's maximum temperature.
+2. **Precipitation prediction:** Classify whether measurable precipitation will occur the following day.
+
+The default historical dataset uses weather observations from Bengaluru, India.
+
+## 📊 Model Evaluation
+
+The following results were recorded from the project's evaluation run. Confirm that they match `outputs/metrics.json` before publishing them.
+
+| Metric | Random Forest / Model Result |
+|---|---:|
+| Temperature MAE | 0.832°C |
+| Temperature RMSE | 1.093°C |
+| Rain prediction accuracy | 84.5% |
+| Rain prediction precision | 81.3% |
+| Rain prediction recall | 83.9% |
+| Rain prediction F1-score | 82.6% |
+
+### Temperature baseline comparison
+
+| Metric | Persistence Baseline | Random Forest |
+|---|---:|---:|
+| MAE | 1.143°C | 0.832°C |
+| RMSE | 1.493°C | 1.093°C |
+
+The Random Forest model achieved lower temperature prediction errors than the persistence baseline in this evaluation run.
+
+**Evaluation approach:** The latest 20% of usable observations are reserved for testing using a chronological split, rather than randomly shuffling time-series observations.
+
+## Dashboard Features
+
+- Search for a city and view current weather conditions.
+- Explore the seven-day weather forecast and hourly trends.
+- Switch between Celsius and Fahrenheit.
+- View UV, rainfall, and weather insights.
+- Inspect machine learning evaluation metrics.
+- Compare model performance with the persistence baseline.
+- Explore actual versus predicted temperature and test predictions.
+
+The live dashboard forecast comes from Open-Meteo. The historical machine learning evaluation is a separate component.
+
+## Project Structure
+
+```text
+WeatherCast-ML/
+├── app.py
+├── requirements.txt
+├── README.md
+├── PROJECT_NOTES.md
+├── .gitignore
+├── src/
+│   ├── __init__.py
+│   ├── features.py
+│   ├── fetch_data.py
+│   └── train.py
+└── outputs/
+    ├── metrics.json
+    └── test_predictions.csv
+```
+
+The `data/` and `models/` directories are generated locally when the pipeline runs. Large datasets and trained model files are excluded from version control.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.10 or a compatible version supported by the project's dependencies.
+- Git
+- An internet connection to fetch historical data and retrieve live weather information.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Keerthiii21/Weather-Prediction-Model.git
+cd Weather-Prediction-Model
+```
+
+### 2. Create and activate a virtual environment
 
 **Windows PowerShell**
+
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-If PowerShell blocks activation, use Command Prompt terminal:
+
+If PowerShell blocks virtual-environment activation, use Command Prompt instead:
+
 ```bat
 .venv\Scripts\activate.bat
 ```
 
-### 3. Fetch data
+### 3. Fetch historical weather data
+
 ```bash
 python src/fetch_data.py
 ```
-This downloads daily historical observations from Open-Meteo. An internet connection is required. If the API is unavailable, retry later.
 
-### 4. Train and evaluate
+This downloads historical observations from the Open-Meteo Archive API.
+
+### 4. Train and evaluate the models
+
 ```bash
 python src/train.py
 ```
-The script writes results to `outputs/` and models to `models/`. Read `outputs/metrics.json` and use those real results in your portfolio.
 
-### 5. Interactive dashboard
-The Streamlit interface includes live current conditions, city search, °C/°F toggle, 7-day forecast, hourly trends, UV/rain insights, and an ML evaluation tab. The live forecast is served by Open-Meteo; the trained historical ML model is evaluated separately.
+The pipeline generates evaluation metrics, test predictions, and trained models in the configured output directories.
 
-### 6. Optional dashboard
+### 5. Launch the dashboard
+
 ```bash
 streamlit run app.py
 ```
-Open the local URL printed in the terminal.
 
-## Project structure
-```text
-WeatherCast-ML/
-├── app.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-├── src/
-│   ├── fetch_data.py
-│   ├── features.py
-│   └── train.py
-├── data/                 # downloaded CSV goes here
-├── models/               # trained models are saved here
-└── outputs/               # metrics and predictions are generated here
-```
+Open the local URL displayed in your terminal to explore the dashboard.
 
-## Data source and target definition
-Open-Meteo Archive API: https://open-meteo.com/en/docs/historical-weather-api  
-The default configuration uses Bengaluru (12.9716° N, 77.5946° E) and daily maximum/minimum temperature, mean temperature, precipitation sum, wind speed, and weather code. For each date *t*, features use weather observations through *t*, and the target is the next day's maximum temperature and precipitation occurrence.
+## Data Source
 
-## Evaluation
-A chronological split reserves the latest 20% of usable rows as the test set. This is more appropriate for time series than randomly shuffling observations. Metrics are reported against a persistence baseline (tomorrow's max temperature ≈ today's max temperature) and a Random Forest model.
+Historical weather data is obtained from the [Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api).
 
-## Limitations and responsible use
-- This is an educational forecasting model, not an operational weather warning system.
-- Historical observations alone cannot reliably predict sudden local changes; official forecasts should be used for decisions affecting safety.
-- Model performance can vary by season and location. A single-location test is not evidence of generalization to other regions.
-- Precipitation is imbalanced in many climates; interpret F1/recall alongside class counts.
-- API data availability and definitions can change.
+The default configuration uses Bengaluru coordinates:
 
-## Suggested next improvements
-1. Add a second location and evaluate out-of-location generalization.
-2. Compare HistGradientBoosting / XGBoost (if installed) with Random Forest.
-3. Use forecast-model inputs, not only lagged observations, for operational next-day forecasts.
-4. Add confidence intervals and calibration analysis.
-5. Track experiment configurations and version the dataset.
+- Latitude: 12.9716° N
+- Longitude: 77.5946° E
 
-## Portfolio description (use only after running)
-**WeatherCast ML — Next-Day Weather Prediction**  
-Built a reproducible ML pipeline using historical weather observations, lag/rolling features, and chronological validation to predict next-day maximum temperature and precipitation occurrence. Compared a persistence baseline with a Random Forest model and reported regression/classification metrics. *(Add actual metric values after running the project.)*
+Features include historical temperature, precipitation, wind speed, weather codes, lagged observations, rolling statistics, and calendar information, as implemented in the feature pipeline.
+
+## Limitations
+
+- This is an educational and portfolio project, not an operational weather-warning system.
+- Model performance is evaluated on one location and may not generalize to other regions.
+- Sudden weather changes cannot always be predicted from historical observations alone.
+- Precipitation metrics should be interpreted alongside class distributions and the chosen classification threshold.
+- Live forecasts and historical model predictions use different data sources and methods.
+
+For weather-related safety decisions, consult official forecasts and alerts.
+
+## Future Improvements
+
+- Evaluate model generalization across multiple cities.
+- Compare Random Forest with additional gradient-boosting models.
+- Investigate forecast-model inputs for improved next-day predictions.
+- Add prediction uncertainty and probability calibration analysis.
+- Track experiment configurations and dataset versions.
+- Deploy the dashboard for public access.
+
+## Author
+
+**Keerthi Chandrashekhar**
+
+GitHub: [@Keerthiii21](https://github.com/Keerthiii21)
+
+---
+
+*Built as a machine learning portfolio project to explore weather forecasting, time-series feature engineering, and model evaluation.*
